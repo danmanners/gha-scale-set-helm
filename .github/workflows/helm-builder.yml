@@ -1,0 +1,69 @@
+# Pull the GitHub Runner Scale Set Controller OCI Artifact
+# and convert it to a standard Helm tar.gz file and push it
+# to this repository for use with tools like Kustomize.
+
+name: GitHub Runner Scale Set Controller Helm Builder
+run-name: ${{github.actor}} - GitHub Runner Scale Set Controller Helm Builder
+
+on:
+  push:
+    branches:
+    - main
+
+env:
+  GHRSS_VERSION: 0.4.0
+  CR_VERSION: 1.6.0
+    
+jobs:
+  helm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Skopeo
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y skopeo
+      # - name: Install Helm
+      #   run: |
+      #     curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+      # https://github.com/helm/chart-releaser
+      - name: install chart-releaser
+        run: |
+          wget -qO- https://github.com/helm/chart-releaser/releases/download/v${{CR_VERSION}}/chart-releaser_${{CR_VERSION}}_linux_amd64.tar.gz | tar -xvz -C ./
+      - name: Copy and Download the OCI Artifact
+        run: |
+          mkdir -p arc
+          skopeo copy \
+            docker://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set:${{env.GHRSS_VERSION}} \
+            dir:./arc
+      - name: Find and extract the Helm Chart
+        run: |  
+          for file in $(find arc -type f); do
+            if [[ $(file -I $file | awk '{print $2}') == "application/gzip;" ]]; then
+              tar -zxvf $file
+              break
+            fi
+          done
+      - name: Package the GitHub Action Runner Scale Set Helm Chart
+        run: |
+          ./cr package gha-runner-scale-set/
+
+      - name: Upload Helm Chart to GitHub
+        run: |
+          ./cr upload \
+            --owner ${{github.actor}} \
+            --git-repo gha-runner-scale-set-controller-helm \
+            --package-path ./.cr-release-packages/gha-runner-scale-set-${{env.GHRSS_VERSION}}.tgz \
+            --packages-with-index \
+            --index-path . \
+            --token ${{secrets.GITHUB_TOKEN}} \
+            --skip-existing
+
+      - name: Create and push the Helm Index to GitHub
+        run: |
+          ./cr index \
+          --owner ${{github.actor}} \
+          --git-repo gha-runner-scale-set-controller-helm \
+          --packages-with-index \
+          --index-path . \
+          --token ${{secrets.GITHUB_TOKEN}} \
+          --push
