@@ -12,7 +12,7 @@ on:
 
 env:
   # renovate: datasource=docker depName=ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set versioning=loose
-  GHRSS_VERSION: 0.4.0
+  GHRSS_VERSION: 0.3.0
   # renovate: datasource=github-releases depName=helm/chart-releaser versioning=loose
   CR_VERSION: 1.6.0
 
