@@ -15,6 +15,8 @@ on:
 env:
   # renovate: datasource=docker
   GHRSS_VERSION: "ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set:0.4.0"
+  # renovate: datasource=docker
+  GHRSSC_VERSION: "ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller:0.4.0"
   # renovate: datasource=github-releases depName=helm/chart-releaser
   CR_VERSION: "v1.6.0"
 
@@ -22,6 +24,11 @@ jobs:
   build-and-push-helm-chart:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
+    strategy:
+      max-parallel: 1
+      matrix:
+        chartName: [GHRSSC_VERSION, GHRSS_VERSION]
+  
     steps:
       - name: Clone Repository
         uses: actions/checkout@v3
@@ -34,16 +41,19 @@ jobs:
 
       - name: install chart-releaser
         run: |
-          version="${{env.CR_VERSION}}"
-          wget -qO- \
-          https://github.com/helm/chart-releaser/releases/download/${version}/chart-releaser_${version#v}_linux_amd64.tar.gz | \
-          tar -xvz -C ./
+          if [ ! -f ./cr ]; then
+            version="${{env.CR_VERSION}}"
+            wget -qO- \
+            https://github.com/helm/chart-releaser/releases/download/${version}/chart-releaser_${version#v}_linux_amd64.tar.gz | \
+            tar -xvz -C ./
+          fi
 
       - name: Copy and Download the OCI Artifact
         run: |
           mkdir -p arc
+          chart="${{matrix.chartName}}"
           skopeo copy \
-            docker://${{env.GHRSS_VERSION}} \
+            docker://${chart} \
             dir:./arc
 
       - name: Find and extract the Helm Chart
