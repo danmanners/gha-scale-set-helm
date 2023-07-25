@@ -27,7 +27,7 @@ helm search repo danmanners -l
 
 ## How long will this be supported?
 
-Until GitHub publishes the same chart as a standard
+Until GitHub publishes the same chart as a non-OCI artifact. In an ideal world, this repo _will_ be deprecated in favor of GitHub publishing the chart in a way that Argo, Kustomize, and Jenkins-X can utilize. As of July 2023 however, that is not the case.
 
 ## Thanks
 
