@@ -49,6 +49,7 @@ jobs:
           fi
 
       - name: Copy and Download the OCI Artifact
+        id: copy
         run: |
           mkdir -p arc
           # Check for the matrix, set the chart URL and clone it
@@ -58,6 +59,8 @@ jobs:
             chart="${{ env.GHRSS_VERSION }}" && break
           fi
           skopeo copy docker://${chart} dir:./arc
+          # Output
+          echo "chart=${chart}" >> "$GITHUB_OUTPUT"
 
       - name: Find and extract the Helm Chart
         run: |
@@ -70,7 +73,7 @@ jobs:
 
       - name: Package the GitHub Action Runner Scale Set Helm Chart
         run: |
-          package="$(echo ${chart} | awk -F\/ '{print $4}' | cut -d: -f1)"
+          package="$(echo "${{ steps.copy.outputs.chart }}" | awk -F\/ '{print $4}' | cut -d: -f1)"
           ./cr package ${package}/
 
       - name: Upload Helm Chart to GitHub
