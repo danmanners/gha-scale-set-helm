@@ -70,7 +70,8 @@ jobs:
 
       - name: Package the GitHub Action Runner Scale Set Helm Chart
         run: |
-          ./cr package $(echo ${chart} | awk -F\/ '{print $4}' | cut -d: -f1)
+          package="$(echo ${chart} | awk -F\/ '{print $4}' | cut -d: -f1)"
+          ./cr package ${package}/
 
       - name: Upload Helm Chart to GitHub
         run: |
