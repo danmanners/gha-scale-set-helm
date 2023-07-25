@@ -1,0 +1,13 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+  "regexManagers": [
+    {
+      "fileMatch": ["(^|/)\\.github/workflows/.+\\.ya?ml"],
+      "matchStrings": [
+        "registryUrl=(?<registryUrl>\\S+)\n.*?\"(?<depName>[a-zA-Z-]+)-(?<currentValue>.*)\"\n"
+      ],
+      "datasourceTemplate": "github-releases"
+    }
+  ]
+}
