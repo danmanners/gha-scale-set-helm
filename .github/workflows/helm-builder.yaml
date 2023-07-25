@@ -31,9 +31,9 @@ jobs:
 
       - name: install chart-releaser
         run: |
-          version="${version#v}"
+          version="${${{env.CR_VERSION}}#v}"
           wget -qO- \
-          https://github.com/helm/chart-releaser/releases/download/${{env.CR_VERSION}}/chart-releaser_${version}_linux_amd64.tar.gz | \
+          https://github.com/helm/chart-releaser/releases/download/v${version}/chart-releaser_${version}_linux_amd64.tar.gz | \
           tar -xvz -C ./
 
       - name: Copy and Download the OCI Artifact
