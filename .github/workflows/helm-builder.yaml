@@ -21,7 +21,7 @@ env:
   CR_VERSION: "v1.6.0"
 
 jobs:
-  build-and-push-helm-chart:
+  helm:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     strategy:
@@ -70,7 +70,7 @@ jobs:
 
       - name: Package the GitHub Action Runner Scale Set Helm Chart
         run: |
-          ./cr package gha-runner-scale-set/
+          ./cr package $(echo ${chart} | awk -F\/ '{print $4}' | cut -d: -f1)
 
       - name: Upload Helm Chart to GitHub
         run: |
