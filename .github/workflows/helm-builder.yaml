@@ -54,9 +54,9 @@ jobs:
           mkdir -p arc
           # Check for the matrix, set the chart URL and clone it
           if [[ "${{ matrix.chartName }}" == "GHRSSC_VERSION" ]]; then
-            chart="${{ env.GHRSSC_VERSION }}" && break
+            chart="${{ env.GHRSSC_VERSION }}"
           elif [[ "${{ matrix.chartName }}" == "GHRSS_VERSION" ]]; then
-            chart="${{ env.GHRSS_VERSION }}" && break
+            chart="${{ env.GHRSS_VERSION }}"
           fi
           skopeo copy docker://${chart} dir:./arc
           # Output
@@ -94,8 +94,8 @@ jobs:
         # https://github.com/helm/chart-releaser/issues/187
       - name: Create and push the Helm Index to GitHub
         run: |
-          mkdir -p .cr-index && \
-          git fetch --all && \
+          mkdir -p .cr-index
+          git fetch --all
           ./cr index \
           --owner ${{github.actor}} \
           --git-repo ${{github.event.repository.name}} \
