@@ -16,7 +16,7 @@ The reason this is necessary _at all_ is because GitHub has decided with the Git
 
 ```bash
 # Add the Helm Registry
-helm repo add danmanners https://danmanners.github.io/gha-runner-scale-set-controller-helm
+helm repo add danmanners https://danmanners.github.io/gha-scale-set-helm
 
 # Update your local Helm repositories
 helm repo update
@@ -31,7 +31,7 @@ Until GitHub publishes the same chart as a non-OCI artifact. In an ideal world, 
 
 ## Thanks
 
-Thanks to the following people for helping me make this possible
+Thanks to the following people for helping me make this possible:
 
 - [onedr0p](https://github.com/onedr0p)
 - [rwaltr](https://github.com/rwaltr)
@@ -39,3 +39,5 @@ Thanks to the following people for helping me make this possible
 - [coolguy1771](https://github.com/coolguy1771)
 - [SparksD2145](https://github.com/SparksD2145)
 - [chkpwd](https://github.com/chkpwd)
+
+## Licensing
