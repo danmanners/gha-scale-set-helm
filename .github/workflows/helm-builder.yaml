@@ -51,10 +51,13 @@ jobs:
       - name: Copy and Download the OCI Artifact
         run: |
           mkdir -p arc
-          chart="${{matrix.chartName}}"
-          skopeo copy \
-            docker://${chart} \
-            dir:./arc
+          # Check for the matrix, set the chart URL and clone it
+          if [[ "${{ matrix.chartName }}" == "GHRSSC_VERSION" ]]; then
+            chart="${{ env.GHRSSC_VERSION }}" && break
+          elif [[ "${{ matrix.chartName }}" == "GHRSS_VERSION" ]]; then
+            chart="${{ env.GHRSS_VERSION }}" && break
+          fi
+          skopeo copy docker://${chart} dir:./arc
 
       - name: Find and extract the Helm Chart
         run: |
