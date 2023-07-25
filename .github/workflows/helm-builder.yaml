@@ -11,9 +11,9 @@ on:
       - main
 
 env:
-  # renovate: registryUrl=https://github.com/actions/actions-runner-controller
-  GHRSS_VERSION: "gha-runner-scale-set-0.3.0"
-  # renovate: registryUrl=https://github.com/helm/chart-releaser
+  # renovate: datasource=docker
+  GHRSS_VERSION: "ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set:0.3.0"
+  # renovate: datasource=github-releases depName=helm/chart-releaser
   CR_VERSION: "v1.6.0"
 
 jobs:

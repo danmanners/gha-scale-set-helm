@@ -5,7 +5,14 @@
     {
       "fileMatch": ["(^|/)\\.github/workflows/.+\\.ya?ml"],
       "matchStrings": [
-        "registryUrl=(?<registryUrl>\\S+)\n.*?\"(?<depName>[a-zA-Z-]+)-(?<currentValue>.*)\"\n"
+        ".*_VERSION: \"(?<depName>\\S+):(?<currentValue>\\S+)\""
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "fileMatch": ["(^|/)\\.github/workflows/.+\\.ya?ml"],
+      "matchStrings": [
+        "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\n.*?\"(?<currentValue>\\S+)\"\n"
       ],
       "datasourceTemplate": "github-releases"
     }
