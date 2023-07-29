@@ -61,7 +61,6 @@ jobs:
           skopeo copy docker://${chart} dir:./arc
           # Output
           echo "chart=${chart}" >> "$GITHUB_OUTPUT"
-          echo "directory=$(ls | grep gha)" >> "$GITHUB_OUTPUT"
 
       - name: Find and extract the Helm Chart
         run: |
@@ -71,6 +70,8 @@ jobs:
               break
             fi
           done
+          # Output
+          echo "directory=$(ls | grep gha)" >> "$GITHUB_OUTPUT"
 
       # Modify the Source for the Helm Chart to point to this repository
       - name: Modify the Source URL to permit downloads
