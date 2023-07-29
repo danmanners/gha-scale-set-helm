@@ -37,7 +37,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            skopeo wget file git
+            skopeo wget file git yq
 
       - name: install chart-releaser
         run: |
@@ -70,6 +70,11 @@ jobs:
               break
             fi
           done
+
+      # Modify the Source for the Helm Chart to point to this repository
+      - name: Modify the Source URL to permit downloads\
+        run: |
+          yq -i '.sources[0] = "https://github.com/danmanners/gha-scale-set-helm"' ${{ steps.copy.outputs.chart }}/Chart.yaml
 
       - name: Package the GitHub Action Runner Scale Set Helm Chart
         run: |
