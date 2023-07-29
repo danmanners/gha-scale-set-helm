@@ -61,6 +61,7 @@ jobs:
           skopeo copy docker://${chart} dir:./arc
           # Output
           echo "chart=${chart}" >> "$GITHUB_OUTPUT"
+          echo "directory=$(ls | grep gha)" >> "$GITHUB_OUTPUT"
 
       - name: Find and extract the Helm Chart
         run: |
@@ -75,7 +76,7 @@ jobs:
       - name: Modify the Source URL to permit downloads
         uses: mikefarah/yq@v4.34.2
         with:
-          cmd: yq -i '.sources[0] = "https://github.com/danmanners/gha-scale-set-helm"' ${{ steps.copy.outputs.chart }}/Chart.yaml
+          cmd: yq -i '.sources[0] = "https://github.com/danmanners/gha-scale-set-helm"' ${{ steps.copy.outputs.directory }}/Chart.yaml
   
       - name: Package the GitHub Action Runner Scale Set Helm Chart
         run: |
