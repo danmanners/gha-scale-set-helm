@@ -78,7 +78,7 @@ jobs:
       - name: Modify the Source URL to permit downloads
         uses: mikefarah/yq@v4.34.2
         with:
-          cmd: yq -i '.sources[0] = "https://github.com/danmanners/gha-scale-set-helm"' ${{ steps.extract.outputs.directory }}/Chart.yaml
+          cmd: yq -i '(.sources.[] | select(. == "*github.com/actions/actions-runner-controller")) = "https://github.com/danmanners/gha-scale-set-helm"' ${{ steps.extract.outputs.directory }}/Chart.yaml
   
       - name: Package the GitHub Action Runner Scale Set Helm Chart
         run: |
