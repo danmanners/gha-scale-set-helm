@@ -113,7 +113,7 @@ jobs:
       - name: Create and push the Helm Index to GitHub
         run: |
           # Verify that the PAGES_BRANCH exists on origin
-          git ls-remote --heads origin ${{env.PAGES_BRANCH}} || ( echo "Branch ${{env.PAGES_BRANCH}} does not exist on origin" && exit 1 )
+          git show-ref origin ${{env.PAGES_BRANCH}} || ( echo "Branch ${{env.PAGES_BRANCH}} does not exist on origin" && exit 1 )
           mkdir -p .cr-index
           git fetch --all
           ./cr index \
