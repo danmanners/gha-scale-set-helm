@@ -91,7 +91,7 @@ jobs:
             --owner ${{github.actor}} \
             --git-repo ${{github.event.repository.name}} \
             --packages-with-index \
-            --token ${{secrets.SECRET_TOKEN}} \
+            --token ${{secrets.GITHUB_TOKEN}} \
             --skip-existing \
             --push
 
@@ -109,6 +109,6 @@ jobs:
           --owner ${{github.actor}} \
           --git-repo ${{github.event.repository.name}} \
           --packages-with-index \
-          --token ${{secrets.SECRET_TOKEN}} \
+          --token ${{secrets.GITHUB_TOKEN}} \
           --index-path . \
           --push
