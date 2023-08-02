@@ -20,6 +20,9 @@ env:
   GHRSSC_VERSION: "ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller:0.4.0"
   # renovate: datasource=github-releases depName=helm/chart-releaser
   CR_VERSION: "v1.6.0"
+  # Branch name where GitHub Pages are published
+  # https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
+  PAGES_BRANCH: "gh-pages"
 
 jobs:
   helm:
@@ -109,6 +112,8 @@ jobs:
         # https://github.com/helm/chart-releaser/issues/187
       - name: Create and push the Helm Index to GitHub
         run: |
+          # Verify that the PAGES_BRANCH exists on origin
+          git ls-remote --heads origin ${{env.PAGES_BRANCH}} || ( echo "Branch ${{env.PAGES_BRANCH}} does not exist on origin" && exit 1 )
           mkdir -p .cr-index
           git fetch --all
           ./cr index \
@@ -117,4 +122,5 @@ jobs:
           --packages-with-index \
           --token ${{secrets.GITHUB_TOKEN}} \
           --index-path . \
+          --pages-branch ${{env.PAGES_BRANCH}} \
           --push
