@@ -11,6 +11,7 @@ on:
       - closed
     branches:
       - main
+    
 
 env:
   # renovate: datasource=docker
@@ -24,6 +25,11 @@ jobs:
   helm:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
+
+    permissions:
+      contents: write
+      packages: write
+
     strategy:
       max-parallel: 1
       matrix:
