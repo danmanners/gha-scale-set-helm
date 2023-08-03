@@ -7,11 +7,11 @@ run-name: ${{github.actor}} - GitHub Runner Scale Set Controller Helm Builder
 
 on:
   pull_request:
-    types: 
+    types:
       - closed
     branches:
       - main
-    
+
 
 env:
   # renovate: datasource=docker
@@ -20,6 +20,9 @@ env:
   GHRSSC_VERSION: "ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller:0.4.0"
   # renovate: datasource=github-releases depName=helm/chart-releaser
   CR_VERSION: "v1.6.0"
+  # Branch name where GitHub Pages are published
+  # https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
+  PAGES_BRANCH: "gh-pages"
 
 jobs:
   helm:
@@ -34,7 +37,7 @@ jobs:
       max-parallel: 1
       matrix:
         chartName: [GHRSSC_VERSION, GHRSS_VERSION]
-  
+
     steps:
       - name: Clone Repository
         uses: actions/checkout@v3
@@ -71,7 +74,7 @@ jobs:
       - name: Find and extract the Helm Chart
         id: extract
         run: |
-          for file in $(find arc -type f); do  
+          for file in $(find arc -type f); do
             if [[ $(file $file --mime-type | awk '{print $2}') == "application/gzip" ]]; then
               tar -zxvf $file
               break
@@ -84,8 +87,8 @@ jobs:
       - name: Modify the Source URL to permit downloads
         uses: mikefarah/yq@v4.34.2
         with:
-          cmd: yq -i '(.sources.[] | select(. == "*github.com/actions/actions-runner-controller")) = "https://github.com/danmanners/gha-scale-set-helm"' ${{ steps.extract.outputs.directory }}/Chart.yaml
-  
+          cmd: yq -i '(.sources.[] | select(. == "*github.com/actions/actions-runner-controller")) = "https://github.com/${{github.event.repository.owner.login}}/${{github.event.repository.name}}"' ${{ steps.extract.outputs.directory }}/Chart.yaml
+
       - name: Package the GitHub Action Runner Scale Set Helm Chart
         run: |
           package="$(echo "${{ steps.copy.outputs.chart }}" | awk -F\/ '{print $4}' | cut -d: -f1)"
@@ -94,7 +97,7 @@ jobs:
       - name: Upload Helm Chart to GitHub
         run: |
           ./cr upload \
-            --owner ${{github.actor}} \
+            --owner ${{github.event.repository.owner.login}} \
             --git-repo ${{github.event.repository.name}} \
             --packages-with-index \
             --token ${{secrets.GITHUB_TOKEN}} \
@@ -109,12 +112,15 @@ jobs:
         # https://github.com/helm/chart-releaser/issues/187
       - name: Create and push the Helm Index to GitHub
         run: |
+          # Verify that the PAGES_BRANCH exists on origin
+          git show-ref origin ${{env.PAGES_BRANCH}} || ( echo "Branch ${{env.PAGES_BRANCH}} does not exist on origin" && exit 1 )
           mkdir -p .cr-index
           git fetch --all
           ./cr index \
-          --owner ${{github.actor}} \
+          --owner ${{github.event.repository.owner.login}} \
           --git-repo ${{github.event.repository.name}} \
           --packages-with-index \
           --token ${{secrets.GITHUB_TOKEN}} \
           --index-path . \
+          --pages-branch ${{env.PAGES_BRANCH}} \
           --push
