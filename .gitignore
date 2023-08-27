@@ -1,9 +1,12 @@
-# Possible dev directories
+# Charts
+charts/
+
+# Dev directories
 gha-runner-*
 .cr-index
 .cr-release-packages
 arc
 
-# Possible dev files
+# Dev files
 index.yaml
 cr

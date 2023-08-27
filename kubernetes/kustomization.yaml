@@ -1,0 +1,37 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: gharc
+
+# GitHub Runner Scale Set Controller CRD Resources
+# https://github.com/actions/actions-runner-controller/tree/master/charts/gha-runner-scale-set-controller/crds
+resources:
+- https://raw.githubusercontent.com/actions/actions-runner-controller/gha-runner-scale-set-0.5.0/charts/gha-runner-scale-set-controller/crds/actions.github.com_autoscalinglisteners.yaml
+- https://raw.githubusercontent.com/actions/actions-runner-controller/gha-runner-scale-set-0.5.0/charts/gha-runner-scale-set-controller/crds/actions.github.com_autoscalingrunnersets.yaml
+- https://raw.githubusercontent.com/actions/actions-runner-controller/gha-runner-scale-set-0.5.0/charts/gha-runner-scale-set-controller/crds/actions.github.com_ephemeralrunners.yaml
+- https://raw.githubusercontent.com/actions/actions-runner-controller/gha-runner-scale-set-0.5.0/charts/gha-runner-scale-set-controller/crds/actions.github.com_ephemeralrunnersets.yaml
+- namespace.yaml
+
+helmCharts:
+# GitHub Runner Scale Set Controller
+- name: gha-runner-scale-set-controller
+  releaseName: arc-rssc
+  namespace: gharc
+  repo: https://danmanners.github.io/gha-scale-set-helm
+  version: 0.5.0
+
+# GitHub Runner Scale Set
+- name: gha-runner-scale-set
+  releaseName: arc-rss
+  namespace: gharc
+  repo: https://danmanners.github.io/gha-scale-set-helm
+  version: 0.5.0
+  valuesInline:
+    githubConfigUrl: https://github.com/danmanners/gha-scale-set-helm
+    githubConfigSecret:
+      github_token: ghs_fakeTokenHere
+    runnerGroup: "personal"
+    minRunners: 0
+    maxRunners: 5
+    controllerServiceAccount:
+      name: arc-rssc
+      namespace: gharc
