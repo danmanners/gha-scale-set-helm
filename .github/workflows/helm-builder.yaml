@@ -41,7 +41,9 @@ jobs:
     steps:
       - name: Clone Repository
         uses: actions/checkout@v3
-
+        with:
+          fetch-depth: 0
+      
       - name: echo git config
         run : |
           cat .git/config
