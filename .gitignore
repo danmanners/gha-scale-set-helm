@@ -1,0 +1,8 @@
+# Possible dev directories
+gha-runner-*
+.cr-release-packages
+arc
+
+# Possible dev files
+index.yaml
+cr
