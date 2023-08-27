@@ -12,7 +12,6 @@ on:
     branches:
       - main
 
-
 env:
   # renovate: datasource=docker
   GHRSS_VERSION: "ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set:0.5.0"
@@ -43,10 +42,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      
-      - name: echo git config
-        run : |
-          cat .git/config
 
       - name: Install required tools
         run: |
@@ -88,17 +83,6 @@ jobs:
           done
           # Output
           echo "directory=$(ls | grep gha)" >> "$GITHUB_OUTPUT"
-
-      # Modify the Source for the Helm Chart to point to this repository
-      - name: Modify the Source URL to permit downloads
-        uses: mikefarah/yq@v4.34.2
-        with:
-          cmd: yq -i '(.sources.[] | select(. == "*github.com/actions/actions-runner-controller")) = "https://github.com/${{github.event.repository.owner.login}}/${{github.event.repository.name}}"' ${{ steps.extract.outputs.directory }}/Chart.yaml
-
-      - name: Modify the Source URL to permit downloads
-        uses: mikefarah/yq@v4.34.2
-        with:
-          cmd: yq -i '(.sources.[] | select(. == "*github.com/actions/dev-arc")) = "https://github.com/${{github.event.repository.owner.login}}/${{github.event.repository.name}}"' ${{ steps.extract.outputs.directory }}/Chart.yaml
 
       - name: Package the GitHub Action Runner Scale Set Helm Chart
         run: |

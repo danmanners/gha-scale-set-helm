@@ -1,18 +1,14 @@
 # GitHub Action Runner Scale Sets and Scale Set Controller
 
-GitHub has released the [Action Runner Scale Set Controller](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners-with-actions-runner-controller/deploying-runner-scale-sets-with-actions-runner-controller), which is great!
+GitHub has introduced the [Action Runner Scale Set Controller](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners-with-actions-runner-controller/deploying-runner-scale-sets-with-actions-runner-controller), a valuable addition to self-hosting GitHub Action Runners. However, it's worth noting that this release is exclusively in the form of an OCI Helm artifact. Consequently, certain tools such as Kustomize, Jenkins-X, Spinnaker, and to some extent, ArgoCD, cannot seamlessly integrate with it. This particular project has been created to address this limitation by providing the Helm charts as conventional tarballs.
 
-The issue is they've **ONLY** released it as an OCI Helm chart, which means that tools like Kustomize, Jenkins-X, Spinnaker, and ArgoCD (sort of) cannot natively support it. Hence, this project exists to serve those Helm charts as traditional tarballs.
-
-> If you're looking for more information on the GitHub Action Runner Scale Set Controller, [check here for more information](https://github.com/actions/actions-runner-controller/tree/gha-runner-scale-set-0.4.0/docs/preview/gha-runner-scale-set-controller).
+For additional insights into the GitHub Action Runner Scale Set Controller, you can refer to [this link](https://github.com/actions/actions-runner-controller/tree/gha-runner-scale-set-0.4.0/docs/preview/gha-runner-scale-set-controller).
 
 ## Details
 
-This repo executes a GitHub Action when PRs are merged from [Renovate](https://github.com/renovatebot/renovate). The GitHub Action uses [helm/chart-releaser](https://github.com/helm/chart-releaser) and [containers/skopeo](https://github.com/containers/skopeo) in order to pull the OCI artifact, extract the Helm Chart from within, re-package it, and push it to GitHub Releases while utilizing GitHub Pages for the helm index.
+This repository contains a GitHub Action that triggers when pull requests (PRs) are merged from the [Renovate](https://github.com/renovatebot/renovate) tool. The Action employs two main tools, [helm/chart-releaser](https://github.com/helm/chart-releaser) and [containers/skopeo](https://github.com/containers/skopeo), to perform a sequence of tasks. It retrieves an OCI artifact, extracts a Helm Chart from it, repackages the chart, and then pushes it to GitHub Releases. This process also utilizes GitHub Pages to manage the Helm index.
 
-The reason this is necessary _at all_ is because GitHub has decided with the GitHub Action Runner Controller v2 as well as the GitHub Action Runner Scale Set Controller that they will **only** be publishing OCI artifacts. If anyone uses ArgoCD, Kustomize, Jenkins-X, Spinnaker, or several other tools, this limits or fully breaks how  the helm charts can be deployed.
-
-My goal is for this process to be entirely transparent so that the artifacts can be trusted that they have been unmodified. I'm happy to enhance this project and the GitHub Action building these resources, just open an issue!
+The overarching objective is to ensure transparency in this procedure, thereby establishing trust that the artifacts remain unaltered. Contributions to enhance this project or the GitHub Action workflow are welcomed through issue submissions or pull requests.
 
 ## Usage
 
@@ -27,15 +23,33 @@ helm repo update
 helm search repo danmanners -l
 ```
 
+## Example Usage with Kustomize
+
+For examples on how to use this repo with Kustomize, see the [example Kustomization file](kubernetes/kustomization.yaml). You can test this by running the following command:
+
+```bash
+kustomize build --enable-helm \
+https://github.com/danmanners/gha-scale-set-helm/kubernetes
+```
+
+## Values Files
+
+For details on the values for each of the Helm Chart, please refer to the official value files provided by GitHub.
+
+- [GitHub Action Runner Scale Set](https://github.com/actions/actions-runner-controller/blob/master/charts/gha-runner-scale-set/values.yaml)
+- [GitHub Action Runner Scale Set Controller](https://github.com/actions/actions-runner-controller/blob/master/charts/gha-runner-scale-set-controller/values.yaml)
+
 ## How long will this be supported?
 
-Until GitHub publishes the same chart as a non-OCI artifact. In an ideal world, this repo _will_ be deprecated in favor of GitHub publishing the chart in a way that Kustomize, ArgoCD, Jenkins-X, Spinnaker, and other tooling can utilize.
+The support for this project will continue until GitHub releases the same chart as a traditional tarball. The ultimate goal is for this repository to become obsolete as GitHub makes the chart available in a manner that can be effectively utilized by tools like Kustomize, ArgoCD, Jenkins-X, Spinnaker, and similar tooling.
 
-As of July 2023, that is not the case.
+As of August 2023 however, that is not the case.
+
+> - ~~July 2023~~
 
 ## Questions/Concerns
 
-Please open an issue if there are any questions or concerns.
+Please feel free to create an issue if you have any questions or concerns.
 
 ## Thanks
 
