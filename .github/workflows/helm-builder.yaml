@@ -95,6 +95,11 @@ jobs:
         with:
           cmd: yq -i '(.sources.[] | select(. == "*github.com/actions/actions-runner-controller")) = "https://github.com/${{github.event.repository.owner.login}}/${{github.event.repository.name}}"' ${{ steps.extract.outputs.directory }}/Chart.yaml
 
+      - name: Modify the Source URL to permit downloads
+        uses: mikefarah/yq@v4.34.2
+        with:
+          cmd: yq -i '(.sources.[] | select(. == "*github.com/actions/dev-arc")) = "https://github.com/${{github.event.repository.owner.login}}/${{github.event.repository.name}}"' ${{ steps.extract.outputs.directory }}/Chart.yaml
+
       - name: Package the GitHub Action Runner Scale Set Helm Chart
         run: |
           package="$(echo "${{ steps.copy.outputs.chart }}" | awk -F\/ '{print $4}' | cut -d: -f1)"
@@ -105,7 +110,6 @@ jobs:
           ./cr upload \
             --owner ${{github.event.repository.owner.login}} \
             --git-repo ${{github.event.repository.name}} \
-            --packages-with-index \
             --token ${{secrets.GITHUB_TOKEN}} \
             --skip-existing \
             --push
@@ -125,7 +129,6 @@ jobs:
           ./cr index \
           --owner ${{github.event.repository.owner.login}} \
           --git-repo ${{github.event.repository.name}} \
-          --packages-with-index \
           --token ${{secrets.GITHUB_TOKEN}} \
           --index-path . \
           --pages-branch ${{env.PAGES_BRANCH}} \

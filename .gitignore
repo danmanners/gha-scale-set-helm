@@ -1,5 +1,6 @@
 # Possible dev directories
 gha-runner-*
+.cr-index
 .cr-release-packages
 arc
 
