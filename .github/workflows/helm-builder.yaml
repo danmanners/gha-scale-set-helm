@@ -91,12 +91,12 @@ jobs:
 
       # Modify the Source for the Helm Chart to point to this repository
       - name: Modify the Source URL to permit downloads
-        uses: mikefarah/yq@v4.34.2
+        uses: mikefarah/yq@v4.35.1
         with:
           cmd: yq -i '(.sources.[] | select(. == "*github.com/actions/actions-runner-controller")) = "https://github.com/${{github.event.repository.owner.login}}/${{github.event.repository.name}}"' ${{ steps.extract.outputs.directory }}/Chart.yaml
 
       - name: Modify the Source URL to permit downloads
-        uses: mikefarah/yq@v4.34.2
+        uses: mikefarah/yq@v4.35.1
         with:
           cmd: yq -i '(.sources.[] | select(. == "*github.com/actions/dev-arc")) = "https://github.com/${{github.event.repository.owner.login}}/${{github.event.repository.name}}"' ${{ steps.extract.outputs.directory }}/Chart.yaml
 
