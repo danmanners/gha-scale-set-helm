@@ -16,7 +16,7 @@ env:
   # renovate: datasource=docker
   GHRSS_VERSION: "ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set:0.5.0"
   # renovate: datasource=docker
-  GHRSSC_VERSION: "ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller:0.5.0"
+  GHRSSC_VERSION: "ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller:0.6.0"
   # renovate: datasource=github-releases depName=helm/chart-releaser
   CR_VERSION: "v1.6.0"
   # Branch name where GitHub Pages are published
