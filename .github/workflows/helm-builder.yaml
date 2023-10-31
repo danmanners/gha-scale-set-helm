@@ -18,7 +18,7 @@ env:
   # renovate: datasource=docker
   GHRSSC_VERSION: "ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller:0.6.1"
   # renovate: datasource=github-releases depName=helm/chart-releaser
-  CR_VERSION: "v1.6.0"
+  CR_VERSION: "v1.6.1"
   # Branch name where GitHub Pages are published
   # https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
   PAGES_BRANCH: "gh-pages"
