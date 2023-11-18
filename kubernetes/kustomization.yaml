@@ -17,7 +17,7 @@ helmCharts:
   releaseName: arc-rssc
   namespace: gharc
   repo: https://danmanners.github.io/gha-scale-set-helm
-  version: 0.6.1
+  version: 0.7.0
 
 # GitHub Runner Scale Set
 - name: gha-runner-scale-set
