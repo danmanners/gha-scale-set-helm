@@ -24,7 +24,7 @@ helmCharts:
   releaseName: arc-rss
   namespace: gharc
   repo: https://danmanners.github.io/gha-scale-set-helm
-  version: 0.6.1
+  version: 0.7.0
   valuesInline:
     githubConfigUrl: https://github.com/danmanners/gha-scale-set-helm
     githubConfigSecret:
