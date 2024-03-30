@@ -115,6 +115,22 @@ entries:
     version: 0.4.0
   gha-runner-scale-set-controller:
   - apiVersion: v2
+    appVersion: 0.9.0
+    created: "2024-03-30T17:53:06.441036654Z"
+    description: A Helm chart for install actions-runner-controller CRD
+    digest: ab78fad14fbe39e5d038563d8dc5a72921624543484d60c55c99a94d26d28012
+    home: https://github.com/actions/actions-runner-controller
+    maintainers:
+    - name: actions
+      url: https://github.com/actions
+    name: gha-runner-scale-set-controller
+    sources:
+    - https://github.com/actions/actions-runner-controller
+    type: application
+    urls:
+    - https://github.com/danmanners/gha-scale-set-helm/releases/download/gha-runner-scale-set-controller-0.9.0/gha-runner-scale-set-controller-0.9.0.tgz
+    version: 0.9.0
+  - apiVersion: v2
     appVersion: 0.8.3
     created: "2024-02-29T03:19:45.025881048Z"
     description: A Helm chart for install actions-runner-controller CRD
@@ -226,4 +242,4 @@ entries:
     urls:
     - https://github.com/danmanners/gha-scale-set-helm/releases/download/gha-runner-scale-set-controller-0.4.0/gha-runner-scale-set-controller-0.4.0.tgz
     version: 0.4.0
-generated: "2024-02-29T03:19:45.025915853Z"
+generated: "2024-03-30T17:53:06.441082158Z"
